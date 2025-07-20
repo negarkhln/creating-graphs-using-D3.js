@@ -32,7 +32,11 @@
         fill: #333;
       }
       .graph-icon {
-        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
       }
     </style>
   </head>
@@ -46,6 +50,14 @@
       const height = window.innerHeight;
 
       d3.json("graph.json").then(function (graph) {
+        graph.nodes.forEach((n) => {
+          if (!n.group) n.group = "0";
+          if (!n.x) n.x = width / 2;
+          if (!n.y) n.y = height / 2;
+        });
+
+        const clusters = d3.group(graph.nodes, (d) => d.group);
+
         const simulation = d3
           .forceSimulation(graph.nodes)
           .force(
@@ -67,6 +79,14 @@
           .join("line")
           .attr("stroke-width", 2);
 
+        const clusterCircles = svg
+          .insert("g", ":first-child")
+          .selectAll("circle")
+          .data([...clusters.values()])
+          .join("circle")
+          .attr("fill", (d, i) => (i === 0 ? "lightblue" : "lightgreen"))
+          .attr("opacity", 0.2);
+
         const node = svg
           .append("g")
           .selectAll("g")
@@ -76,7 +96,6 @@
           .attr("class", "node")
           .call(drag(simulation));
 
-        // دایره پس‌زمینه
         node
           .append("circle")
           .attr("r", 20)
@@ -84,7 +103,6 @@
           .attr("stroke", "#333")
           .attr("stroke-width", 1.5);
 
-        // آیکون به‌صورت متن
         node
           .append("foreignObject")
           .attr("width", 40)
@@ -97,15 +115,6 @@
               `<i class="${d.icon} graph-icon" style="font-size:20px; color:white;"></i>`
           );
 
-        //        const label = svg
-        //          .append("g")
-        //          .selectAll("text")
-        //          .data(graph.nodes)
-        //          .join("text")
-        //          .text((d) => d.id)
-        //          .attr("dy", 4)
-        //          .attr("dx", -5);
-
         simulation.on("tick", () => {
           link
             .attr("x1", (d) => d.source.x)
@@ -115,7 +124,16 @@
 
           node.attr("transform", (d) => `translate(${d.x},${d.y})`);
 
-          label.attr("x", (d) => d.x).attr("y", (d) => d.y);
+          clusterCircles
+            .attr("cx", (d3Cluster) => d3.mean(d3Cluster, (n) => n.x))
+            .attr("cy", (d3Cluster) => d3.mean(d3Cluster, (n) => n.y))
+            .attr("r", (d3Cluster) => {
+              const cx = d3.mean(d3Cluster, (n) => n.x);
+              const cy = d3.mean(d3Cluster, (n) => n.y);
+              return (
+                d3.max(d3Cluster, (n) => Math.hypot(n.x - cx, n.y - cy)) + 30
+              );
+            });
         });
 
         function drag(simulation) {
