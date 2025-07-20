@@ -3,10 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <title>گراف شبکه با D3.js</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-    />
     <style>
       body {
         margin: 0;
@@ -17,19 +13,19 @@
         width: 100vw;
         height: 100vh;
       }
-      circle {
-        fill: #ce6abd;
+      circle.node-circle {
+        fill: #d6dbb0;
         stroke: #333;
         stroke-width: 1.5px;
+      }
+      circle.group-circle {
+        fill-opacity: 0.3;
+        stroke: #888;
+        stroke-width: 2;
       }
       line {
         stroke: #999;
         stroke-opacity: 0.6;
-      }
-      text {
-        font: 14px sans-serif;
-        pointer-events: none;
-        fill: #333;
       }
       .graph-icon {
         display: flex;
@@ -43,20 +39,35 @@
   <body>
     <svg></svg>
 
+    <div
+      id="tooltip"
+      style="
+        position: absolute;
+        padding: 8px;
+        background: rgb(190, 232, 189);
+        border: 1px solid #aaa;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        display: none;
+      "
+    ></div>
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
       const svg = d3.select("svg");
       const width = window.innerWidth;
       const height = window.innerHeight;
+      const tooltip = d3.select("#tooltip");
 
-      d3.json("graph.json").then(function (graph) {
-        graph.nodes.forEach((n) => {
-          if (!n.group) n.group = "0";
-          if (!n.x) n.x = width / 2;
-          if (!n.y) n.y = height / 2;
-        });
+      const typeImages = {
+        router: "images/router.png",
+        server: "images/server.png",
+        user: "images/person.png",
+      };
 
-        const clusters = d3.group(graph.nodes, (d) => d.group);
+      d3.json("graph.json").then((graph) => {
+        const groups = Array.from(new Set(graph.nodes.map((d) => d.group)));
+        const groupIndex = new Map(groups.map((g, i) => [g, i]));
 
         const simulation = d3
           .forceSimulation(graph.nodes)
@@ -68,40 +79,64 @@
               .distance(120)
           )
           .force("charge", d3.forceManyBody().strength(-300))
-          .force("center", d3.forceCenter(width / 2, height / 2));
+          .force("center", d3.forceCenter(width / 2, height / 2))
+          .force("x", d3.forceX(width / 2).strength(0.1))
+          .force(
+            "y",
+            d3.forceY((d) => 150 + groupIndex.get(d.group) * 200).strength(0.5)
+          ); // هر گروه یه خط جدا
 
-        const link = svg
+        // متوقف و چیدمان اولیه
+        for (let i = 0; i < 300; ++i) simulation.tick();
+
+        // گروه‌ها
+        const clusters = d3.group(graph.nodes, (d) => d.group);
+        svg
+          .insert("g", ":first-child")
+          .selectAll("circle")
+          .data([...clusters.values()])
+          .join("circle")
+          .attr("class", "group-circle")
+          .attr("fill", (nodesInGroup) => {
+            const group = nodesInGroup[0].group;
+            if (group === "1") return "#cf8de5";
+            if (group === "2") return "#92abff";
+            if (group === "3") return "#aad6a0";
+            if (group === "4") return "#ffcfa3";
+            return "rgba(211,211,211,0.3)";
+          })
+          .attr("cx", (d) => d3.mean(d, (n) => n.x))
+          .attr("cy", (d) => d3.mean(d, (n) => n.y))
+          .attr("r", (d) => {
+            const cx = d3.mean(d, (n) => n.x);
+            const cy = d3.mean(d, (n) => n.y);
+            return d3.max(d, (n) => Math.hypot(n.x - cx, n.y - cy)) + 60;
+          });
+
+        // لینک‌ها
+        svg
           .append("g")
           .attr("stroke", "#999")
           .attr("stroke-opacity", 0.6)
           .selectAll("line")
           .data(graph.links)
           .join("line")
-          .attr("stroke-width", 2);
+          .attr("stroke-width", 2)
+          .attr("x1", (d) => d.source.x)
+          .attr("y1", (d) => d.source.y)
+          .attr("x2", (d) => d.target.x)
+          .attr("y2", (d) => d.target.y);
 
-        const clusterCircles = svg
-          .insert("g", ":first-child")
-          .selectAll("circle")
-          .data([...clusters.values()])
-          .join("circle")
-          .attr("fill", (d, i) => (i === 0 ? "lightblue" : "lightgreen"))
-          .attr("opacity", 0.2);
-
+        // نودها
         const node = svg
           .append("g")
           .selectAll("g")
           .data(graph.nodes)
-          .enter()
-          .append("g")
+          .join("g")
           .attr("class", "node")
-          .call(drag(simulation));
+          .attr("transform", (d) => `translate(${d.x},${d.y})`);
 
-        node
-          .append("circle")
-          .attr("r", 20)
-          .attr("fill", "#ce6abd")
-          .attr("stroke", "#333")
-          .attr("stroke-width", 1.5);
+        node.append("circle").attr("class", "node-circle").attr("r", 20);
 
         node
           .append("foreignObject")
@@ -110,50 +145,29 @@
           .attr("x", -20)
           .attr("y", -20)
           .append("xhtml:div")
-          .html(
-            (d) =>
-              `<i class="${d.icon} graph-icon" style="font-size:20px; color:white;"></i>`
-          );
+          .html((d) => {
+            const imgSrc = typeImages[d.type] || "images/default.png";
+            return `<div class="graph-icon">
+          <img src="${imgSrc}" width="30" height="30" style="border-radius: 50%;" />
+        </div>`;
+          });
 
-        simulation.on("tick", () => {
-          link
-            .attr("x1", (d) => d.source.x)
-            .attr("y1", (d) => d.source.y)
-            .attr("x2", (d) => d.target.x)
-            .attr("y2", (d) => d.target.y);
-
-          node.attr("transform", (d) => `translate(${d.x},${d.y})`);
-
-          clusterCircles
-            .attr("cx", (d3Cluster) => d3.mean(d3Cluster, (n) => n.x))
-            .attr("cy", (d3Cluster) => d3.mean(d3Cluster, (n) => n.y))
-            .attr("r", (d3Cluster) => {
-              const cx = d3.mean(d3Cluster, (n) => n.x);
-              const cy = d3.mean(d3Cluster, (n) => n.y);
-              return (
-                d3.max(d3Cluster, (n) => Math.hypot(n.x - cx, n.y - cy)) + 30
-              );
-            });
+        node.on("click", (event, d) => {
+          event.stopPropagation();
+          tooltip
+            .style("left", event.pageX + "px")
+            .style("top", event.pageY + "px")
+            .style("display", "block")
+            .html(
+              `<strong>name:</strong> ${d.name}<br><strong>IP:</strong> ${d.IP}`
+            );
         });
 
-        function drag(simulation) {
-          return d3
-            .drag()
-            .on("start", (event, d) => {
-              if (!event.active) simulation.alphaTarget(0.3).restart();
-              d.fx = d.x;
-              d.fy = d.y;
-            })
-            .on("drag", (event, d) => {
-              d.fx = event.x;
-              d.fy = event.y;
-            })
-            .on("end", (event, d) => {
-              if (!event.active) simulation.alphaTarget(0);
-              d.fx = null;
-              d.fy = null;
-            });
-        }
+        d3.select("body").on("click", (event) => {
+          if (!event.target.closest(".node")) {
+            tooltip.style("display", "none");
+          }
+        });
       });
     </script>
   </body>

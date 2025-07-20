@@ -1,11 +1,47 @@
 {
   "nodes": [
-    { "id": "1", "icon": "bi bi-house", "group": "1" },
-    { "id": "2", "icon": "bi bi-person", "group": "1" },
-    { "id": "3", "icon": "bi bi-gear", "group": "1" },
-    { "id": "4", "icon": "bi bi-laptop", "group": "2" },
-    { "id": "5", "icon": "bi bi-telephone", "group": "2" },
-    { "id": "6", "icon": "bi bi-instagram", "group": "2" }
+    {
+      "id": "1",
+      "name": "server-A",
+      "type": "server",
+      "group": "4",
+      "IP": "349"
+    },
+    {
+      "id": "2",
+      "name": "router-B",
+      "type": "router",
+      "group": "1",
+      "IP": "920"
+    },
+    {
+      "id": "3",
+      "name": "user-C",
+      "type": "user",
+      "group": "4",
+      "IP": "492"
+    },
+    {
+      "id": "4",
+      "name": "server-D",
+      "type": "server",
+      "group": "3",
+      "IP": "184"
+    },
+    {
+      "id": "5",
+      "name": "router-E",
+      "type": "router",
+      "group": "2",
+      "IP": "270"
+    },
+    {
+      "id": "6",
+      "name": "user-F",
+      "type": "user",
+      "group": "3",
+      "IP": "527"
+    }
   ],
   "links": [
     { "source": "1", "target": "2" },
