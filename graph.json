@@ -11,14 +11,14 @@
       "id": "2",
       "name": "router-B",
       "type": "router",
-      "group": "2",
+      "group": "1",
       "IP": "920"
     },
     {
       "id": "3",
       "name": "user-C",
       "type": "user",
-      "group": "2",
+      "group": "1",
       "IP": "492"
     },
     {
@@ -32,161 +32,161 @@
       "id": "5",
       "name": "router-E",
       "type": "router",
-      "group": "3",
+      "group": "1",
       "IP": "270"
     },
     {
       "id": "6",
       "name": "user-F",
       "type": "user",
-      "group": "3",
+      "group": "2",
       "IP": "527"
     },
     {
       "id": "7",
       "name": "server-G",
       "type": "server",
-      "group": "4",
+      "group": "2",
       "IP": "130"
     },
     {
       "id": "8",
       "name": "router-H",
       "type": "router",
-      "group": "3",
+      "group": "2",
       "IP": "297"
     },
     {
       "id": "9",
       "name": "user-I",
       "type": "user",
-      "group": "4",
+      "group": "2",
       "IP": "836"
     },
     {
       "id": "10",
       "name": "server-J",
       "type": "server",
-      "group": "4",
+      "group": "3",
       "IP": "825"
     },
     {
       "id": "11",
       "name": "router-K",
       "type": "router",
-      "group": "5",
+      "group": "3",
       "IP": "169"
     },
     {
       "id": "12",
       "name": "user-L",
       "type": "user",
-      "group": "5",
+      "group": "3",
       "IP": "229"
     },
     {
       "id": "13",
       "name": "router-K",
       "type": "router",
-      "group": "6",
+      "group": "3",
       "IP": "169"
     },
     {
       "id": "14",
       "name": "router-K",
       "type": "router",
-      "group": "7",
+      "group": "5",
       "IP": "169"
     },
     {
       "id": "15",
       "name": "router-K",
       "type": "router",
-      "group": "6",
+      "group": "5",
       "IP": "169"
     },
     {
       "id": "16",
       "name": "router-K",
       "type": "router",
-      "group": "7",
+      "group": "5",
       "IP": "169"
     },
     {
       "id": "17",
       "name": "router-K",
       "type": "router",
-      "group": "8",
+      "group": "5",
       "IP": "169"
     },
     {
       "id": "18",
       "name": "router-K",
       "type": "router",
-      "group": "8",
+      "group": "4",
       "IP": "169"
     },
     {
       "id": "19",
       "name": "router-K",
       "type": "router",
-      "group": "7",
+      "group": "4",
       "IP": "169"
     },
     {
       "id": "20",
       "name": "router-K",
       "type": "router",
-      "group": "6",
+      "group": "4",
       "IP": "169"
     },
     {
       "id": "21",
       "name": "user-V",
       "type": "user",
-      "group": "8",
+      "group": "4",
       "IP": "714"
     },
     {
       "id": "22",
       "name": "server-W",
       "type": "server",
-      "group": "8",
+      "group": "6",
       "IP": "343"
     },
     {
       "id": "23",
       "name": "user-X",
       "type": "user",
-      "group": "3",
+      "group": "6",
       "IP": "802"
     },
     {
       "id": "24",
       "name": "user-Y",
       "type": "user",
-      "group": "1",
+      "group": "6",
       "IP": "295"
     },
     {
       "id": "25",
       "name": "user-Z",
       "type": "user",
-      "group": "7",
+      "group": "6",
       "IP": "546"
     },
     {
       "id": "26",
       "name": "server-A",
       "type": "server",
-      "group": "5",
+      "group": "7",
       "IP": "433"
     },
     {
       "id": "27",
       "name": "user-B",
       "type": "user",
-      "group": "2",
+      "group": "7",
       "IP": "214"
     },
     {
@@ -200,7 +200,7 @@
       "id": "29",
       "name": "router-D",
       "type": "router",
-      "group": "5",
+      "group": "7",
       "IP": "441"
     },
     {
@@ -214,35 +214,35 @@
       "id": "31",
       "name": "server-F",
       "type": "server",
-      "group": "4",
+      "group": "7",
       "IP": "657"
     },
     {
       "id": "32",
       "name": "user-G",
       "type": "user",
-      "group": "2",
+      "group": "7",
       "IP": "672"
     },
     {
       "id": "33",
       "name": "server-H",
       "type": "server",
-      "group": "5",
+      "group": "8",
       "IP": "564"
     },
     {
       "id": "34",
       "name": "user-I",
       "type": "user",
-      "group": "4",
+      "group": "8",
       "IP": "752"
     },
     {
       "id": "35",
       "name": "router-J",
       "type": "router",
-      "group": "2",
+      "group": "8",
       "IP": "549"
     },
     {
@@ -256,102 +256,110 @@
       "id": "37",
       "name": "user-L",
       "type": "user",
-      "group": "5",
+      "group": "9",
       "IP": "590"
     },
     {
       "id": "38",
       "name": "user-M",
       "type": "user",
-      "group": "6",
+      "group": "9",
       "IP": "941"
     },
     {
       "id": "39",
       "name": "router-N",
       "type": "router",
-      "group": "2",
+      "group": "9",
       "IP": "310"
     },
     {
       "id": "40",
       "name": "user-O",
       "type": "user",
-      "group": "1",
+      "group": "9",
       "IP": "674"
     },
     {
       "id": "41",
       "name": "server-P",
       "type": "server",
-      "group": "3",
+      "group": "9",
       "IP": "362"
     },
     {
       "id": "42",
       "name": "router-Q",
       "type": "router",
-      "group": "3",
+      "group": "9",
       "IP": "169"
     },
     {
       "id": "43",
       "name": "router-R",
       "type": "router",
-      "group": "2",
+      "group": "10",
       "IP": "185"
     },
     {
       "id": "44",
       "name": "server-S",
       "type": "server",
-      "group": "6",
+      "group": "10",
       "IP": "279"
     },
     {
       "id": "45",
       "name": "router-T",
       "type": "router",
-      "group": "6",
+      "group": "10",
       "IP": "299"
     },
     {
       "id": "46",
       "name": "router-U",
       "type": "router",
-      "group": "1",
+      "group": "10",
       "IP": "110"
     },
     {
       "id": "47",
       "name": "server-V",
       "type": "server",
-      "group": "1",
+      "group": "11",
       "IP": "744"
     },
     {
       "id": "48",
       "name": "user-W",
       "type": "user",
-      "group": "4",
+      "group": "11",
       "IP": "398"
     },
     {
       "id": "49",
       "name": "router-X",
       "type": "router",
-      "group": "6",
+      "group": "11",
       "IP": "189"
     },
     {
       "id": "50",
       "name": "user-Y",
       "type": "user",
-      "group": "4",
+      "group": "11",
       "IP": "464"
     }
   ],
   "links": [
+    {
+      "source": "1",
+      "target": "2"
+    },
+    {
+      "source": "1",
+      "target": "3"
+    },
     {
       "source": "1",
       "target": "4"
@@ -361,52 +369,48 @@
       "target": "5"
     },
     {
-      "source": "2",
-      "target": "3"
-    },
-    {
-      "source": "3",
-      "target": "5"
-    },
-    {
-      "source": "5",
+      "source": "1",
       "target": "6"
     },
     {
-      "source": "4",
-      "target": "8"
+      "source": "6",
+      "target": "7"
     },
     {
       "source": "6",
       "target": "8"
     },
     {
-      "source": "7",
-      "target": "8"
+      "source": "6",
+      "target": "9"
     },
     {
-      "source": "7",
+      "source": "6",
       "target": "10"
-    },
-    {
-      "source": "9",
-      "target": "8"
     },
     {
       "source": "10",
       "target": "11"
     },
     {
-      "source": "12",
+      "source": "10",
+      "target": "12"
+    },
+    {
+      "source": "10",
       "target": "13"
     },
     {
-      "source": "13",
+      "source": "8",
       "target": "14"
     },
     {
       "source": "14",
       "target": "15"
+    },
+    {
+      "source": "14",
+      "target": "17"
     },
     {
       "source": "15",
@@ -421,140 +425,168 @@
       "target": "18"
     },
     {
-      "source": "18",
+      "source": "17",
       "target": "19"
     },
     {
-      "source": "19",
+      "source": "17",
       "target": "20"
     },
     {
-      "source": "20",
-      "target": "12"
+      "source": "17",
+      "target": "21"
     },
     {
-      "source": "4",
-      "target": "12"
-    },
-    {
-      "source": "21",
-      "target": "15"
+      "source": "16",
+      "target": "22"
     },
     {
       "source": "22",
-      "target": "21"
+      "target": "25"
     },
     {
-      "source": "23",
-      "target": "14"
-    },
-    {
-      "source": "24",
-      "target": "22"
+      "source": "22",
+      "target": "23"
     },
     {
       "source": "25",
-      "target": "3"
+      "target": "24"
     },
     {
-      "source": "26",
-      "target": "15"
+      "source": "23",
+      "target": "24"
+    },
+    {
+      "source": "18",
+      "target": "26"
     },
     {
       "source": "27",
-      "target": "4"
-    },
-    {
-      "source": "28",
-      "target": "10"
-    },
-    {
-      "source": "29",
-      "target": "19"
-    },
-    {
-      "source": "30",
-      "target": "8"
-    },
-    {
-      "source": "31",
-      "target": "17"
-    },
-    {
-      "source": "32",
-      "target": "10"
-    },
-    {
-      "source": "33",
-      "target": "7"
-    },
-    {
-      "source": "34",
-      "target": "8"
-    },
-    {
-      "source": "35",
-      "target": "15"
-    },
-    {
-      "source": "36",
-      "target": "14"
-    },
-    {
-      "source": "37",
-      "target": "2"
-    },
-    {
-      "source": "38",
-      "target": "34"
-    },
-    {
-      "source": "39",
-      "target": "21"
-    },
-    {
-      "source": "40",
       "target": "26"
     },
     {
-      "source": "41",
-      "target": "27"
-    },
-    {
-      "source": "42",
-      "target": "6"
-    },
-    {
-      "source": "43",
-      "target": "22"
-    },
-    {
-      "source": "44",
-      "target": "17"
-    },
-    {
-      "source": "45",
-      "target": "42"
-    },
-    {
-      "source": "46",
+      "source": "26",
       "target": "28"
     },
     {
-      "source": "47",
-      "target": "39"
+      "source": "27",
+      "target": "28"
     },
     {
-      "source": "48",
+      "source": "29",
+      "target": "28"
+    },
+    {
+      "source": "26",
+      "target": "29"
+    },
+    {
+      "source": "32",
       "target": "26"
     },
     {
-      "source": "49",
-      "target": "27"
+      "source": "29",
+      "target": "30"
     },
     {
-      "source": "50",
+      "source": "31",
+      "target": "32"
+    },
+    {
+      "source": "31",
+      "target": "30"
+    },
+    {
+      "source": "30",
+      "target": "33"
+    },
+    {
+      "source": "30",
+      "target": "34"
+    },
+    {
+      "source": "30",
+      "target": "35"
+    },
+    {
+      "source": "30",
+      "target": "36"
+    },
+    {
+      "source": "36",
+      "target": "37"
+    },
+    {
+      "source": "37",
+      "target": "42"
+    },
+    {
+      "source": "38",
       "target": "41"
+    },
+    {
+      "source": "39",
+      "target": "40"
+    },
+    {
+      "source": "37",
+      "target": "38"
+    },
+    {
+      "source": "38",
+      "target": "39"
+    },
+    {
+      "source": "42",
+      "target": "41"
+    },
+    {
+      "source": "41",
+      "target": "40"
+    },
+    {
+      "source": "39",
+      "target": "43"
+    },
+    {
+      "source": "39",
+      "target": "44"
+    },
+    {
+      "source": "39",
+      "target": "45"
+    },
+    {
+      "source": "39",
+      "target": "46"
+    },
+    {
+      "source": "44",
+      "target": "47"
+    },
+    {
+      "source": "44",
+      "target": "48"
+    },
+    {
+      "source": "44",
+      "target": "49"
+    },
+    {
+      "source": "44",
+      "target": "50"
+    },
+    {
+      "source": "9",
+      "target": "26"
+    },
+    {
+      "source": "12",
+      "target": "45"
+    },
+    {
+      "source": "34",
+      "target": "25"
     }
   ]
 }
