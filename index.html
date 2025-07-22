@@ -1,32 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
   <head>
     <meta charset="UTF-8" />
-    <title>گراف شبکه با D3.js</title>
+    <title>گراف تعاملی با D3.js</title>
     <style>
+      /* تنظیمات کلی صفحه */
       body {
         margin: 0;
-        overflow: hidden;
-        background: #f3f3f3;
+        overflow: hidden; /* جلوگیری از اسکرول */
+        background: #f0f0f0;
       }
+
+      /* تنظیمات svg که گراف داخلش رسم میشه */
       svg {
-        width: 100vw;
-        height: 100vh;
+        width: 100vw; /* عرض کل صفحه */
+        height: 100vh; /* ارتفاع کل صفحه */
+        cursor: grab; /* تغییر شکل موس روی svg */
       }
-      circle.node-circle {
-        fill: #d6dbb0;
-        stroke: #333;
-        stroke-width: 1.5px;
+
+      /* ظاهر دایره‌های نود */
+      .node-circle {
+        stroke: #333; /* رنگ حاشیه */
+        stroke-width: 1.5px; /* ضخامت حاشیه */
       }
-      circle.group-circle {
-        fill-opacity: 0.3;
-        stroke: #888;
-        stroke-width: 2;
-      }
+
+      /* ظاهر خطوط (لینک‌ها) */
       line {
         stroke: #999;
         stroke-opacity: 0.6;
       }
+
+      /* کانتینر آیکون داخل نودها */
       .graph-icon {
         display: flex;
         justify-content: center;
@@ -34,110 +38,111 @@
         width: 40px;
         height: 40px;
       }
-    </style>
-  </head>
-  <body>
-    <svg></svg>
 
-    <div
-      id="tooltip"
-      style="
+      /* استایل تولتیپ */
+      #tooltip {
         position: absolute;
         padding: 8px;
         background: rgb(190, 232, 189);
         border: 1px solid #aaa;
         border-radius: 10px;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        display: none;
-      "
-    ></div>
+        display: none; /* به صورت پیش‌فرض مخفی است */
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <svg></svg>
+    <div id="tooltip"></div>
+    <!-- جعبه نمایش اطلاعات نود هنگام کلیک -->
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
-      const svg = d3.select("svg");
+      // دریافت ابعاد صفحه
       const width = window.innerWidth;
       const height = window.innerHeight;
+
+      // انتخاب المان svg و تولتیپ
+      const svg = d3.select("svg");
       const tooltip = d3.select("#tooltip");
 
+      // آدرس تصاویر آیکون انواع نودها
       const typeImages = {
         router: "images/router.png",
         server: "images/server.png",
         user: "images/person.png",
       };
 
+      // بارگذاری داده‌ها از فایل json
       d3.json("graph.json").then((graph) => {
-        const groups = Array.from(new Set(graph.nodes.map((d) => d.group)));
-        const groupIndex = new Map(groups.map((g, i) => [g, i]));
+        // یک لایه گروه برای زوم و جابه‌جایی می‌سازیم
+        const zoomLayer = svg.append("g");
 
+        // تنظیم رفتار زوم و پَن روی svg
+        const zoom = d3.zoom().on("zoom", (event) => {
+          zoomLayer.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+
+        // استخراج لیست یکتا از گروه‌ها
+        const groups = Array.from(new Set(graph.nodes.map((d) => d.group)));
+
+        // ساخت رنگبندی پویا بر اساس تعداد گروه‌ها
+        const colorScale = d3
+          .scaleOrdinal()
+          .domain(groups)
+          .range(
+            groups.map((d, i) => d3.interpolateRainbow(i / groups.length))
+          );
+
+        // تعریف شبیه‌ساز فیزیکی نیروهای گراف
         const simulation = d3
-          .forceSimulation(graph.nodes)
+          .forceSimulation(graph.nodes) // نودها
           .force(
             "link",
             d3
-              .forceLink(graph.links)
+              .forceLink(graph.links) // یال‌ها
               .id((d) => d.id)
-              .distance(120)
+              .distance(120) // فاصله یال‌ها
           )
-          .force("charge", d3.forceManyBody().strength(-300))
-          .force("center", d3.forceCenter(width / 2, height / 2))
-          .force("x", d3.forceX(width / 2).strength(0.1))
-          .force(
-            "y",
-            d3.forceY((d) => 150 + groupIndex.get(d.group) * 200).strength(0.5)
-          ); // هر گروه یه خط جدا
+          .force("charge", d3.forceManyBody().strength(-300)) // نیروی دافعه نودها
+          .force("center", d3.forceCenter(width / 2, height / 2)) // مرکز صفحه
+          .force("collision", d3.forceCollide().radius(40)); // جلوگیری از همپوشانی نودها
 
-        // متوقف و چیدمان اولیه
-        for (let i = 0; i < 300; ++i) simulation.tick();
-
-        // گروه‌ها
-        const clusters = d3.group(graph.nodes, (d) => d.group);
-        svg
-          .insert("g", ":first-child")
-          .selectAll("circle")
-          .data([...clusters.values()])
-          .join("circle")
-          .attr("class", "group-circle")
-          .attr("fill", (nodesInGroup) => {
-            const group = nodesInGroup[0].group;
-            if (group === "1") return "#cf8de5";
-            if (group === "2") return "#92abff";
-            if (group === "3") return "#aad6a0";
-            if (group === "4") return "#ffcfa3";
-            return "rgba(211,211,211,0.3)";
-          })
-          .attr("cx", (d) => d3.mean(d, (n) => n.x))
-          .attr("cy", (d) => d3.mean(d, (n) => n.y))
-          .attr("r", (d) => {
-            const cx = d3.mean(d, (n) => n.x);
-            const cy = d3.mean(d, (n) => n.y);
-            return d3.max(d, (n) => Math.hypot(n.x - cx, n.y - cy)) + 60;
-          });
-
-        // لینک‌ها
-        svg
+        // رسم لینک‌ها (خط‌ها)
+        const link = zoomLayer
           .append("g")
           .attr("stroke", "#999")
           .attr("stroke-opacity", 0.6)
           .selectAll("line")
           .data(graph.links)
           .join("line")
-          .attr("stroke-width", 2)
-          .attr("x1", (d) => d.source.x)
-          .attr("y1", (d) => d.source.y)
-          .attr("x2", (d) => d.target.x)
-          .attr("y2", (d) => d.target.y);
+          .attr("stroke-width", 2);
 
-        // نودها
-        const node = svg
+        // رسم نودها و اضافه کردن قابلیت درگ
+        const node = zoomLayer
           .append("g")
           .selectAll("g")
           .data(graph.nodes)
           .join("g")
           .attr("class", "node")
-          .attr("transform", (d) => `translate(${d.x},${d.y})`);
+          .call(
+            d3
+              .drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended)
+          );
 
-        node.append("circle").attr("class", "node-circle").attr("r", 20);
+        // اضافه کردن دایره به هر نود و رنگ دادن بر اساس گروه
+        node
+          .append("circle")
+          .attr("class", "node-circle")
+          .attr("r", 20)
+          .attr("fill", (d) => colorScale(d.group));
 
+        // اضافه کردن آیکون به هر نود با استفاده از foreignObject
         node
           .append("foreignObject")
           .attr("width", 40)
@@ -147,27 +152,59 @@
           .append("xhtml:div")
           .html((d) => {
             const imgSrc = typeImages[d.type] || "images/default.png";
-            return `<div class="graph-icon">
-          <img src="${imgSrc}" width="30" height="30" style="border-radius: 50%;" />
-        </div>`;
+            return `
+              <div class="graph-icon">
+                <img src="${imgSrc}" width="30" height="30" style="border-radius: 50%;" />
+              </div>`;
           });
 
+        // بروزرسانی موقعیت‌ها در هر فریم شبیه‌ساز
+        simulation.on("tick", () => {
+          // موقعیت خطوط را تنظیم می‌کند
+          link
+            .attr("x1", (d) => d.source.x)
+            .attr("y1", (d) => d.source.y)
+            .attr("x2", (d) => d.target.x)
+            .attr("y2", (d) => d.target.y);
+
+          // موقعیت نودها را تغییر می‌دهد
+          node.attr("transform", (d) => `translate(${d.x},${d.y})`);
+        });
+
+        // نمایش تولتیپ هنگام کلیک روی نود
         node.on("click", (event, d) => {
-          event.stopPropagation();
+          event.stopPropagation(); // جلوگیری از بسته شدن تولتیپ توسط بادی
           tooltip
             .style("left", event.pageX + "px")
             .style("top", event.pageY + "px")
             .style("display", "block")
-            .html(
-              `<strong>name:</strong> ${d.name}<br><strong>IP:</strong> ${d.IP}`
-            );
+            .html(`<strong>name: ${d.name}<br>IP: ${d.IP}</strong>`);
         });
 
+        // کلیک روی فضای خالی صفحه تولتیپ را مخفی می‌کند
         d3.select("body").on("click", (event) => {
           if (!event.target.closest(".node")) {
             tooltip.style("display", "none");
           }
         });
+
+        // توابع مدیریت درگ نودها:
+        function dragstarted(event, d) {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          d.fx = d.x; // ثابت کردن موقعیت x
+          d.fy = d.y; // ثابت کردن موقعیت y
+        }
+
+        function dragged(event, d) {
+          d.fx = event.x; // به روز رسانی x هنگام درگ
+          d.fy = event.y; // به روز رسانی y هنگام درگ
+        }
+
+        function dragended(event, d) {
+          if (!event.active) simulation.alphaTarget(0);
+          d.fx = null; // آزاد کردن قفل x
+          d.fy = null; // آزاد کردن قفل y
+        }
       });
     </script>
   </body>
